@@ -5,6 +5,7 @@ import datetime
 from Blech import Blech
 
 class Stanzmaschine(Blech):
+
     raw = None
     hersteller = None
     standort = None
@@ -15,17 +16,17 @@ class Stanzmaschine(Blech):
     stanzMuster = None
     stanzMusterNummer = None
     
-
+    
     def __init__(self, jsonData):
         with open(jsonData, "r") as datei:
             daten = json.load(datei)
-            
         self.raw = json.dumps(daten, indent=4)
         self.standort = daten["Standort"]
         self.hersteller = daten["Hersteller"]
         self.wartung = daten["Wartung"]
         self.halle = self.standort["Halle"]
         self.platznummer = self.standort["Platz"]
+        
     
     def leseConfigdatei(self, jsonData2):
         with open(jsonData2, "r") as datei:
@@ -77,16 +78,18 @@ class Stanzmaschine(Blech):
                 if (c.days > minIntervall):
                      intervall.append({"Datum": wartung[i+1]["Datum"],"Arbeiter": wartung[i+1]["von"]  , "Überschreitung": c.days-minIntervall})
         return intervall
-    
-stanzmaschine1 = Stanzmaschine("datensatz1.json")
-stanzmaschine2 = Stanzmaschine("datensatz2.json")
-stanzmaschine3 = Stanzmaschine("datensatz3.json")
-stanzmaschine4 = Stanzmaschine("datensatz4.json")
 
-#print(stanzmaschine1.getStandort())
-#print(stanzmaschine1.getHersteller())
-#print(stanzmaschine1.getWartung())
-#print(stanzmaschine1.checkWartungsintervall(30))
+if __name__ == "__main__":
+
+    stanzmaschine1 = Stanzmaschine("datensatz1.json")
+    stanzmaschine2 = Stanzmaschine("datensatz2.json")
+    stanzmaschine3 = Stanzmaschine("datensatz3.json")
+    stanzmaschine4 = Stanzmaschine("datensatz4.json")
+
+    print(stanzmaschine1.getStandort())
+    print(stanzmaschine1.getHersteller())
+    print(stanzmaschine1.getWartung())
+    print(stanzmaschine1.checkWartungsintervall(30))
 
 
 

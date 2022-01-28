@@ -6,34 +6,51 @@ Created on Tue Dec 21 08:17:00 2021
 """
 
 import glob
-from Wartungsintervall_Klasse import Stanzmaschine
+from Stanzmaschine import Stanzmaschine
 
 class MaschinenSteuerung():
+
     maschinenListe = []
-    dateiliste = None
     
-    def __init__(self, dateiliste):
-        self.dateiliste = glob.glob("*.json")
-        self.maschinenListe(dateiliste)
+    def __init__(self):
+        self.setMaschinenListe()
+
         
-    def setMaschinenListe(self, dateiliste):
-        #dateiliste = glob.glob("*.json")
-        for datei in dateiliste:
-            self.MaschinenListe.append(Stanzmaschine(datei))
+    def setMaschinenListe(self):
+        dateiListe = glob.glob("*.json")
+
+        for datei in dateiListe:
+            self.maschinenListe.append(Stanzmaschine(datei))
         
     def getMaschinenListe(self):
-        return self.MaschinenListe
+        return self.maschinenListe
 
     def getDateiliste(self):
         return self.dateiliste
     
-    def einbuchen(eineMaschine):
-        pass
+    def addMachine(path):
+        self.maschinenListe.append(Stanzmaschine(path))
     
-    def ausbuchen():
-        pass
+    def ausbuchen(self, platznummer, halle):
+
+        maschineGefunden = False
+
+        for maschine in self.maschinenListe:
+
+            if maschine.getPlatznummer == platznummer and maschine.getHalle == halle:
+                
+                print("maschine mit den eigenschaften blalblalb wird entfernt....")
+                print(maschine.show)
+
+                self.maschinenListe.remove(maschine)
+                maschineGefunden = True
+
+        if maschineGefunden == False:
+            print("keine maschine mit den angegebenen parametern gefunden")
 
 maschinenPark = MaschinenSteuerung()
-maschinenPark.setMaschinenListe()
-print(maschinenPark.getMaschinenListe())
-    
+
+"""for maschine in maschinenPark.maschinenListe:
+    print(maschine.getHersteller())"""
+
+print(maschinenPark.maschinenListe[2].getHersteller())
