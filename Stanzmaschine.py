@@ -4,42 +4,69 @@ import datetime
 
 from Blech import Blech
 
-class Stanzmaschine(Blech):
+class Stanzmaschine():
 
-    raw = None
-    hersteller = None
-    standort = None
-    halle = None
-    platznummer = None
-    wartung = None
-    blech = None
-    stanzMuster = None
-    stanzMusterNummer = None
+    raw = ""
+    hersteller = ""
+    standort = ""
+    halle = ""
+    platznummer = ""
+    wartung = ""
+    
+    blech = []
+    stanzMuster = []
+    stanzMusterNummer = ""
     
     
     def __init__(self, jsonData):
-        with open(jsonData, "r") as datei:
-            daten = json.load(datei)
-        self.raw = json.dumps(daten, indent=4)
-        self.standort = daten["Standort"]
-        self.hersteller = daten["Hersteller"]
-        self.wartung = daten["Wartung"]
+        self.leseConfigdatei(jsonData)
+        self.standort = self.raw["Standort"]
+        self.hersteller = self.raw["Hersteller"]
+        self.wartung = self.raw["Wartung"]
         self.halle = self.standort["Halle"]
         self.platznummer = self.standort["Platz"]
+        self.stanzMuster = self.raw["Muster"]
+        self.stanzMusterNummer = self.raw["MusterNr"]
         
+    def leseConfigdatei(self, jsonData):
+       with open(jsonData, "r") as datei:
+            self.raw = json.load(datei)
     
-    def leseConfigdatei(self, jsonData2):
-        with open(jsonData2, "r") as datei:
-            daten = json.load(datei)
-        self.stanzMuster = json.dumps(daten, indent=4)
-        return self.stanzMuster
+    def showConfig(self):
+        return json.dumps(self.raw, indent=4)
         
+    def setStanzMuster(self, stanzMuster):
+        self.stanzMuster = stanzMuster
+        
+    def getStanzMuster(self):
+        for zeile in self.stanzMuster:
+            print(zeile)
+                    
+    def setStanzMusterNummer(self, stanzMusterNummer):
+        self.stanzMusterNummer = stanzMusterNummer
+        
+    def getStanzMusterNummer(self):
+        return self.stanzMusterNummer
+        
+    def setBlech(self):
+        self.blech = Blech()
+        
+    def getBlech(self):
+        return self.blech
+    
+    def stanze(self):
+        self.setBlech()
+        for zeile in range (len(self.stanzMuster)):
+            for spalte in range (len(self.stanzMuster[zeile])):
+                if self.stanzMuster[zeile][spalte] == 0:
+                    self.blech.entfernen(zeile,spalte)
+        return self.blech
+                    
     def setStandort(self, standort):
         self.standort = standort  
         
     def getStandort(self):
         return self.standort
-    
     
     def setHersteller(self, hersteller):
         self.hersteller = hersteller
@@ -85,11 +112,29 @@ if __name__ == "__main__":
     stanzmaschine2 = Stanzmaschine("datensatz2.json")
     stanzmaschine3 = Stanzmaschine("datensatz3.json")
     stanzmaschine4 = Stanzmaschine("datensatz4.json")
-
-    print(stanzmaschine1.getStandort())
-    print(stanzmaschine1.getHersteller())
-    print(stanzmaschine1.getWartung())
-    print(stanzmaschine1.checkWartungsintervall(30))
-
+    
+    
+    #print(stanzmaschine1.getStandort())
+    #print(stanzmaschine1.getHersteller())
+    #print(stanzmaschine1.getWartung())
+    #print(stanzmaschine1.checkWartungsintervall(30))
+    #print(stanzmaschine1.setBlech())
+    #print(stanzmaschine1.getBlech())
+    stanzmaschine1.stanze()
+    print(stanzmaschine1.blech.zeigeBlech())
+    
+    stanzmaschine2.stanze()
+    print(stanzmaschine2.blech.zeigeBlech())
+    
+    stanzmaschine3.stanze()
+    print(stanzmaschine3.blech.zeigeBlech())
+    
+    
+    
+    
+    
+    
+    
+  
 
 
